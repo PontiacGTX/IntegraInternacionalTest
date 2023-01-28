@@ -25,6 +25,8 @@ namespace Data.Model
             this.Nombre = empleado.Nombre;
             this.Id=empleado.Id;
         }
+
+        
         public IFormFile File { get; set; }
         public int Id { get; set; }
         [Required]

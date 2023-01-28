@@ -9,6 +9,8 @@ using static DataAccess.Helpers.Factory;
 using Shared;
 using DataAccess.Helpers;
 using System.Collections.Generic;
+using Services.Validation;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace IntegraInternacionalTest.Controllers
 {
@@ -42,7 +44,7 @@ namespace IntegraInternacionalTest.Controllers
             catch (Exception ex)
             {
 
-                throw;
+                return Error();
             }
         }
 
@@ -57,7 +59,7 @@ namespace IntegraInternacionalTest.Controllers
             catch (Exception ex)
             {
 
-                throw;
+                return Error();
             }
         }
 
@@ -73,34 +75,24 @@ namespace IntegraInternacionalTest.Controllers
             catch (Exception ex)
             {
 
-                throw;
+                return Error();
             }
         }
 
-        
+       
 
         [HttpPost("Edit")]
         public async Task<IActionResult> Edit([FromForm] EmpleadoEditModel model)
         {
             try
             {
-                List<KeyValuePair<string, List<string>>> validations = new List<KeyValuePair<string, List<string>>>();
-                if(!await _empleadoServices.Exist(x=>x.Id == model.Id))
+                ModelState.RemoveValidationFor("File");
+                if (!ModelState.IsValid)
                 {
-                    validations.Add(GetValidationKVEntry("Id", new List<string>() { "No Existe el usuario" }));
-                    
+                    return Ok(ModelState.MVCBadRequest(model));
                 }
 
-                if((await _empleadoServices.GetAll(x=>x.Correo.Trim().ToLower()==model.Correo.Trim().ToLower() && x.Id !=model.Id)).Count>0)
-                {
-                    validations.Add(GetValidationKVEntry("Correo", new List<string>() { "ya existe este Correo" }));
-                }
-
-                if ((await _empleadoServices.GetAll(x => x.Telefono.Trim() == model.Telefono.Trim() && x.Id != model.Id)).Count > 0)
-                {
-                    validations.Add(GetValidationKVEntry("Telefono", new List<string>() { "ya existe este Telefono" }));
-                }
-
+                var validations = await _empleadoServices.ValidateEmpleadoPostModel(model);
                 if (validations.Count>0)
                 {
                     Ok(MVCBadRequest(validations, model));

@@ -49,13 +49,14 @@ function sendValues(event) {
         contentType: false,
         processData: false,
         success: function (result) {
-            alert('Successfully received Data ');
+            
             console.log(result);
             if (result.statusCode != 200) {
                 $('#validationMessages').empty()
                 if (result.validation && result.validation.length > 0) {
                     $('#validationMessages').css('display','block')
-                    $('#validationMessages').css('visibility','visible')
+                    $('#validationMessages').css('visibility', 'visible')
+                    alert('Validation errors received');
                     for (const error of result.validation) {
                         for (const validation of error.value) {
                             $('#validationMessages').append('<li style="color:red">' + validation + ' </li>')

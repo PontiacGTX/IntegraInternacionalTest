@@ -22,7 +22,7 @@ namespace Shared.Validators
             return false;
 
             
-             return Regex.Match(val, "\\(\\d{3}\\) \\d{4}-\\d{4}").Success;
+             return Regex.Match(val, @"\(\d{3}\) ?\d{4}-\d{4}").Success;
         }
     }
 }
