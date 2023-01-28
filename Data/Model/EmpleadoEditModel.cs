@@ -35,6 +35,7 @@ namespace Data.Model
         [PhoneValidation("El formato de telefono debe ser (xxx) xxxx-xxxx")]
         public string Telefono { get; set; }
         [Required]
+        [EmailAddress]
         public string Correo { get; set; }
         [Required]
         public string Foto { get; set; }

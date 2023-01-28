@@ -20,6 +20,7 @@ namespace Data.Model
         [Required]
         public string Telefono { get; set; }
         [Required]
+        [EmailAddress]
         public string Correo { get; set; }
         [Display(Name ="Foto")]
         public IFormFile File { get; set; }
